@@ -1,0 +1,2 @@
+run "pip install -r requirements.txt" in command prompt(win+R > "cmd">enter)
+to use the script
