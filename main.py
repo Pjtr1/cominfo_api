@@ -36,6 +36,17 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 #user after def register is a variable with class of usercreate. the variable is created in that line, user.email is just the email str object in the UserCreate class(see schemas.py)
 
 
+@app.post("/login", response_model=schemas.UserResponse)
+def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
+    db_user = crud.authenticate_user(db, user.email, user.password)
+    if not db_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    return db_user
+
 
 #start the server(for testing, will use gunicorn+uvicorn for the actual app)
 #remove later
