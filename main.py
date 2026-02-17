@@ -4,10 +4,19 @@ from database import SessionLocal, engine, Base
 import models
 import crud
 import schemas
+from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],      # dev only
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency to get DB session
 def get_db():
@@ -24,14 +33,13 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
 
     return crud.create_user(db, user.email, user.password)
-
+#user after def register is a variable with class of usercreate. the variable is created in that line, user.email is just the email str object in the UserCreate class(see schemas.py)
 
 
 
 #start the server(for testing, will use gunicorn+uvicorn for the actual app)
 #remove later
 # import uvicorn
-#
 # if __name__ == "__main__":
 #     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
 
