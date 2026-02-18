@@ -28,7 +28,7 @@ class Canteen(Base):
     image_url = Column(String(255), nullable=True)
 
     __table_args__ = (
-        CheckConstraint("occupancy >= 0 AND occupancy <= 100", name="occupancy_percentage"),
+        CheckConstraint("utilization >= 0 AND utilization <= 100", name="canteens_utilization_0_100"),
     )
     restaurants = relationship(
         "Restaurant",
