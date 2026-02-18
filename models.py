@@ -21,7 +21,7 @@ class Canteen(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False, unique=True)
-    occupancy = Column(Integer, nullable=False, default=0)
+    utilization = Column(Integer, nullable=False, default=0)
 
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
