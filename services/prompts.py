@@ -81,7 +81,7 @@ USER MESSAGE:
 
 """
 
-FIELD_CONTEXT_PROMT = """
+FIELD_CONTEXT_PROMPT = """
 some terms definition
 - utilization: integer (0–100)
   Estimated percentage of how crowded the canteen currently is

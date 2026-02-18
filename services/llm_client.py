@@ -12,7 +12,7 @@ def call_llm(prompt: str) -> str:
             "stream": False,
             "temperature": 0
         },
-        timeout=120
+        timeout=30
     )
 
     response.raise_for_status()
