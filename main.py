@@ -6,6 +6,10 @@ import crud
 import schemas
 from fastapi.middleware.cors import CORSMiddleware
 
+from routes.ai import router as ai_router
+from database import get_db
+
+#for returning csv file(to import table data to google sheet)(not using anymore)
 from fastapi.responses import Response
 import csv
 import io
@@ -22,13 +26,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(ai_router)
+
+
 
 @app.post("/register", response_model=schemas.UserResponse)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
@@ -54,7 +54,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
 
 #start the server(for testing, will use gunicorn+uvicorn for the actual app)
 #remove later
-# import uvicorn
-# if __name__ == "__main__":
-#     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+import uvicorn
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
 

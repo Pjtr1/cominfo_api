@@ -20,3 +20,13 @@ engine = create_engine(DATABASE_URL,
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+
+# Dependency to get DB session
+#used to be in main.py but caused some circular import so moved here
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

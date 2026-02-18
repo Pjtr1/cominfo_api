@@ -1,9 +1,14 @@
 from sqlalchemy.orm import Session
-from models import User
+from models import User, Canteen, Restaurant
 from passlib.context import CryptContext
+
+
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+#====================================================================================
+#users table
 def get_password_hash(password: str):
     return pwd_context.hash(password)
 def verify_password(plain_password: str, hashed_password: str):
@@ -29,3 +34,19 @@ def authenticate_user(db: Session, email: str, password: str):
     if not verify_password(password, user.hashed_password):
         return None
     return user
+
+#=========================================================================
+#canteen and restaurant tables
+
+def get_all_canteens(db: Session):
+    return db.query(Canteen).all()
+
+
+
+def get_restaurants_by_canteen(db: Session, canteen_id: int):
+    return (
+        db.query(Restaurant)
+        .filter(Restaurant.canteen_id == canteen_id)
+        .all()
+    )
+
