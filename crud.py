@@ -14,10 +14,10 @@ def get_password_hash(password: str):
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
-def create_user(db: Session, email: str, password: str):
+def create_user(db: Session, username:  str,  email: str, password: str):
     print("Password before hashing:", password)
     hashed_password = get_password_hash(password)
-    db_user = User(email=email, hashed_password=hashed_password)
+    db_user = User(username=username, email=email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
