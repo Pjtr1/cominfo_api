@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 #====================================================================
 #user table
 class UserCreate(BaseModel):
+    username : str
     email: str
     password: str
 
@@ -18,7 +19,6 @@ class UserResponse(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: str
-
 #=====================================================================================================
 #restaurant table
 
