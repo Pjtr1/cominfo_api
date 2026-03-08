@@ -1,6 +1,6 @@
 import requests
 
-OLLAMA_URL = "https://unfostering-nonmelodically-margarett.ngrok-free.dev/api/generate"
+OLLAMA_URL = os.environ.get("OLLAMA_URL")
 MODEL = "mistral:7b"
 
 def call_llm(prompt: str) -> str:
