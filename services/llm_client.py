@@ -1,6 +1,6 @@
 import requests
 
-OLLAMA_URL = os.environ.get("OLLAMA_URL")
+OLLAMA_URL = os.environ["OLLAMA_URL"] + "/api/generate"
 MODEL = "mistral:7b"
 
 def call_llm(prompt: str) -> str:
