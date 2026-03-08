@@ -1,6 +1,8 @@
 import requests
+import os
 
 OLLAMA_URL = os.environ["OLLAMA_URL"] + "/api/generate"
+# change for local test
 MODEL = "mistral:7b"
 
 def call_llm(prompt: str) -> str:
