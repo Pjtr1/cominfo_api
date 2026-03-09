@@ -52,6 +52,19 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     return db_user
 
 
+@app.get("/canteens", response_model=list[schemas.CanteenResponse])
+def get_canteens(db: Session = Depends(get_db)):
+    return crud.get_all_canteens(db)
+
+@app.get("/canteens/{canteen_id}/restaurants", response_model=list[schemas.RestaurantResponse])
+def get_restaurants(canteen_id: int, db: Session = Depends(get_db)):
+    restaurants = crud.get_restaurants_by_canteen(db, canteen_id)
+
+    if not restaurants:
+        return []
+
+    return restaurants
+
 #start the server(for testing, will use gunicorn+uvicorn for the actual app)
 #remove later
 # import uvicorn
