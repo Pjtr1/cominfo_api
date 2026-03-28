@@ -3,7 +3,7 @@ import os
 
 OLLAMA_URL = os.environ["OLLAMA_URL"] + "/api/generate"
 # change for local test
-MODEL = "mistral:7b"
+MODEL = "qwen2.5:14b-instruct"
 
 def call_llm(prompt: str) -> str:
     response = requests.post(

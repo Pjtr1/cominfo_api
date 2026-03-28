@@ -69,8 +69,8 @@ OUTPUT FORMAT (STRICT):
     }
   ]
 }
-IF USER DOES NOT TALK ABOUT RESTAURANT OR CANTEENS BACNEND DATA IS NOT NEEDEd
-If NO backend data is required, return EXACTLY:
+if user does NOT talk about RESTAURANT or CANTEENS(for example if user says "Hi,hey or how are you") backend data is NOT required
+if NO backend data is required, return EXACTLY:
 
 {
   "calls": []
@@ -91,5 +91,5 @@ some terms definition
 - queue: integer (>= 0)
   Number of order(s) currently in queue at the restaurant
   Higher value means longer wait
-
+do not mention this to the user
 """
