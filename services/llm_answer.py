@@ -10,7 +10,7 @@ User message:
 Database information fetched for this reponse:
 {context}
 
-Respond naturally to the user in a few sentences. IF the user talks in thai reply only in thai
+Respond naturally to the user in a few sentences. If user message is in thai reply ONLY IN THAI. DO NOT USE ANY CHINESE
 """
     return call_llm(prompt)
 
