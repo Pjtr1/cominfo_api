@@ -235,7 +235,7 @@ async def create_restaurant_endpoint(
 
 #start the server(for testing, will use gunicorn+uvicorn for the actual app)
 #remove later
-import uvicorn
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+# import uvicorn
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 

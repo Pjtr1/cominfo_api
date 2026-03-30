@@ -1,8 +1,8 @@
 import requests
 import os
 
-# OLLAMA_URL = os.environ["OLLAMA_URL"] + "/api/generate"
-OLLAMA_URL = "https://peskier-enviable-wallace.ngrok-free.dev/api/generate"
+OLLAMA_URL = os.environ["OLLAMA_URL"] + "/api/generate"
+# OLLAMA_URL = "https://peskier-enviable-wallace.ngrok-free.dev/api/generate"
 # change for local test
 MODEL = "qwen2.5:14b-instruct"
 
