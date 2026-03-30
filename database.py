@@ -2,7 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql+pymysql://root:DNQoWUMtELAFdWeoTsRdbfXpqogAKWNN@mainline.proxy.rlwy.net:53907/railway"
+DATABASE_URL = "mysql+pymysql://root:LBdAOcDtaAKqNuEzzwgmauyfpjZBZwoq@hopper.proxy.rlwy.net:22481/railway"
+# mysql+pymysql://root:DNQoWUMtELAFdWeoTsRdbfXpqogAKWNN@mainline.proxy.rlwy.net:53907/railway
+# first db
+
 
 #"mysql+pymysql://root:SDNQoWUMtELAFdWeoTsRdbfXpqogAKWNN@mainline.proxy.rlwy.net:53907/railway?ssl=true" for railway mysql db
 #"mysql+pymysql://User1:Simplepassword-123@localhost/compro_app" old one for the local mysql server

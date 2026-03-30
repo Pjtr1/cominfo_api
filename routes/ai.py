@@ -10,43 +10,33 @@ from services.function_executor import execute_function
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
-def serialize(obj):
-    if isinstance(obj, list):
-        return [serialize(o) for o in obj]
-    if hasattr(obj, "__table__"):
-        return {
-            column.name: getattr(obj, column.name)
-            for column in obj.__table__.columns
-        }
-    return obj
+
 
 @router.post("/message")
 def ai_message(payload: AIMessageRequest, db: Session = Depends(get_db)):
     message = payload.message
+    user_lat = payload.latitude
+    user_lon = payload.longitude
 
+    # Planner decides which functions to call
     planner_json = call_llm_planner(message)
-    #test print
-    print("PLANNER JSON PARSED:")
-    print(planner_json)
+    print("PLANNER JSON PARSED:", planner_json, flush=True)
 
     try:
         planner = LLMPlannerResponse(**planner_json)
     except Exception as e:
-        print("PLANNER PARSE ERROR:", e)
-        print("RAW PLANNER JSON:", planner_json)
+        print("PLANNER PARSE ERROR:", e, flush=True)
+        print("RAW PLANNER JSON:", planner_json, flush=True)
         return {"reply": "Sorry, I couldn't understand your request."}
 
     results = []
     for call in planner.calls:
-        results.append(
-            execute_function(db, call.function, call.args)
-        )
+        result = execute_function(db, call.function, call.args, user_lat, user_lon)
+        results.append(result)
 
-    context = serialize(results)
+    context = json.dumps(results, indent=2)
+    print("FULL CONTEXT SENT TO LLM:", context, flush=True)
 
-    reply = call_llm_answer(
-        message,
-        json.dumps(context, indent=2)
-    )
+    reply = call_llm_answer(message, context)
 
     return {"reply": reply}

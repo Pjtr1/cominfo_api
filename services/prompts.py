@@ -51,13 +51,24 @@ Allowed args:
 IMPORTANT:
 - Only call this function if the user explicitly mentions or provides a canteen
 - If the canteen is not specified, do NOT call this function
+- unless user specifically ask about restaurants that does NOT belong in a canteen then call this function with "args": { "canteen_id": null }
+heres the id for each canteen to use for this function
 
-Example:
+"โรงอาหารวิศวะ A" : canteen_id=1
+"โรงอาหารวิศวะ B" : canteen_id=2
+"โรงอาหารวิศวะ C" : canteen_id=3
+
+:Example 1: all restaurant in canteen 1
 {
   "function": "get_restaurants",
   "args": { "canteen_id": 1 }
 }
 
+Example 2 : all restaurants outside the canteens
+{
+  "function": "get_restaurants",
+  "args": { "canteen_id": null }
+}
 ──────────────────────────────
 OUTPUT FORMAT (STRICT):
 
@@ -91,5 +102,5 @@ some terms definition
 - queue: integer (>= 0)
   Number of order(s) currently in queue at the restaurant
   Higher value means longer wait
-do not mention this to the user
+do not mention this to the us
 """
