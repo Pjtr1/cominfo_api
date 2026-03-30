@@ -16,6 +16,13 @@ from schemas import OrderStatusResponse
 from fastapi import UploadFile, File, Form
 import cloudinary.uploader
 
+import cloudinary
+
+cloudinary.config(
+    cloud_name = "dzft0ec99",
+    api_key = "562835278438914",
+    api_secret = "9LTeVUXI6J4KV5-_psoP4mqQQZc"
+)
 #for returning csv file(to import table data to google sheet)(not using anymore)
 from fastapi.responses import Response
 import csv
