@@ -54,10 +54,10 @@ IMPORTANT:
 - unless user specifically ask about restaurants that does NOT belong in a canteen then call this function with "args": { "canteen_id": null }
 heres the id for each canteen to use for this function
 
-"โรงอาหารวิศวะ A" : canteen_id=1
-"โรงอาหารวิศวะ B" : canteen_id=2
-"โรงอาหารวิศวะ C" : canteen_id=3
-"โรงอาหารสถาปัต" : canteen_id=4
+"Enginerring canteen A" : canteen_id=1
+"Enginerring canteen B" : canteen_id=2
+"Enginerring canteen C" : canteen_id=3
+"architecture canteen" : canteen_id=4
 
 :Example 1: all restaurant in canteen 1
 {
