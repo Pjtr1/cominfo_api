@@ -44,15 +44,6 @@ app.include_router(ai_router)
 
 
 
-# @app.post("/register", response_model=schemas.UserResponse)
-# def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-#     existing_user = crud.get_user_by_email(db, user.email)
-#     if existing_user:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-#
-#     return crud.create_user(db, user.username, user.email, user.password)
-
-
 @app.post("/register", response_model=schemas.UserResponse)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     existing_user = crud.get_user_by_email(db, user.email)
@@ -62,19 +53,7 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # Pass the role from the schema
     return crud.create_user(db, user.username, user.email, user.password, role=user.role)
 
-#user after def register is a variable with class of usercreate. the variable is created in that line, user.email is just the email str object in the UserCreate class(see schemas.py)
 
-
-# @app.post("/login", response_model=schemas.UserResponse)
-# def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
-#     db_user = crud.authenticate_user(db, user.email, user.password)
-#     if not db_user:
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Invalid email or password"
-#         )
-#
-#     return db_user
 
 @app.post("/login", response_model=schemas.UserResponse)
 def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
@@ -90,14 +69,6 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
 def get_canteens(db: Session = Depends(get_db)):
     return crud.get_all_canteens(db)
 
-# @app.get("/canteens/{canteen_id}/restaurants", response_model=list[schemas.RestaurantResponse])
-# def get_restaurants(canteen_id: int, db: Session = Depends(get_db)):
-#     restaurants = crud.get_restaurants_by_canteen(db, canteen_id)
-#
-#     if not restaurants:
-#         return []
-#
-#     return restaurants
 
 @app.get("/restaurants", response_model=list[schemas.RestaurantResponse])
 def get_restaurants(

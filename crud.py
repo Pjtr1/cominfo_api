@@ -16,14 +16,6 @@ def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# def create_user(db: Session, username:  str,  email: str, password: str):
-#     print("Password before hashing:", password)
-#     hashed_password = get_password_hash(password)
-#     db_user = User(username=username, email=email, hashed_password=hashed_password)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
 
 def create_user(db: Session, username: str, email: str, password: str, role: UserRole = UserRole.customer):
     hashed_password = get_password_hash(password)
@@ -43,13 +35,7 @@ def get_user_by_email(db: Session, email: str):
 
 
 
-# def authenticate_user(db: Session, email: str, password: str):
-#     user = get_user_by_email(db, email)
-#     if not user:
-#         return None
-#     if not verify_password(password, user.hashed_password):
-#         return None
-#     return user
+
 
 def authenticate_user(db: Session, email_or_username: str, password: str):
     # Try to find a user where email OR username matches the input
@@ -76,13 +62,6 @@ def get_all_canteens(db: Session):
     return db.query(Canteen).all()
 
 
-
-# def get_restaurants_by_canteen(db: Session, canteen_id: int):
-#     return (
-#         db.query(Restaurant)
-#         .filter(Restaurant.canteen_id == canteen_id)
-#         .all()
-#     )
 
 
 def get_restaurants_by_canteen(db: Session, canteen_id: Optional[int] = None):
