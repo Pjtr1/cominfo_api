@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session, aliased
-from models import User, UserRole, Canteen, Restaurant, MenuCategory, MenuItem, Order, OrderItem, OrderStatus
+from models import User, UserRole, Canteen, Restaurant, MenuCategory, MenuItem, Order, OrderItem, OrderStatus, PaymentStatus
 from passlib.context import CryptContext
 from sqlalchemy import or_, func
 from fastapi import HTTPException, status
 from typing import Optional
-
+import models, schemas
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -38,7 +38,7 @@ def get_user_by_email(db: Session, email: str):
 
 
 def authenticate_user(db: Session, email_or_username: str, password: str):
-    # Try to find a user where email OR username matches the input
+    # Try to find a user where email or username matches the input
     user = db.query(User).filter(
         or_(
             User.email == email_or_username,
@@ -115,7 +115,7 @@ def get_active_order_counts_all_restaurants(db: Session):
         .all()
     )
 
-    return results  # <-- you must return the query results
+    return results  #return the query results
 
 def create_order(db: Session, customer_id: int, order_data):
     if not order_data.items:
@@ -147,7 +147,8 @@ def create_order(db: Session, customer_id: int, order_data):
         customer_id=customer_id,
         restaurant_id=order_data.restaurant_id,
         total_price=total_price,
-        status=OrderStatus.pending
+        status=OrderStatus.pending,
+        payment_status = PaymentStatus.unpaid
     )
     db.add(order)
     db.flush()
@@ -176,6 +177,15 @@ def get_orders_by_customer(db: Session, customer_id: int):
     )
     return orders
 
+def get_orders_by_restaurant(db: Session, restaurant_id: int):
+    orders = (
+        db.query(Order)
+        .filter(Order.restaurant_id == restaurant_id)
+        .order_by(Order.created_at.desc())
+        .all()
+    )
+    return orders
+
 def get_order_status(db: Session, order_id: int):
     """
     Get order status by order ID.
@@ -185,13 +195,30 @@ def get_order_status(db: Session, order_id: int):
         return order
     return None
 
+def update_order(db: Session, order_id: int, update_data: schemas.OrderUpdate):
+    order = db.query(Order).filter(Order.id == order_id).first()
+
+    if not order:
+        return None
+
+    # only update fields that were sent
+    data = update_data.dict(exclude_unset=True)
+
+    for key, value in data.items():
+        setattr(order, key, value)
+
+    db.commit()
+    db.refresh(order)
+
+    return order
+
 
 
 
 def get_restaurant_payment_qr(db: Session, restaurant_id: int):
     return db.query(Restaurant).filter(Restaurant.id == restaurant_id).first()
 
-import models, schemas
+
 def create_restaurant(db: Session, restaurant_data: dict):
     db_restaurant = models.Restaurant(
         name=restaurant_data["name"],
@@ -208,3 +235,31 @@ def create_restaurant(db: Session, restaurant_data: dict):
     db.commit()
     db.refresh(db_restaurant)
     return db_restaurant
+
+def get_restaurants_by_owner(db: Session, owner_id: int):
+    return db.query(Restaurant).filter(Restaurant.owner_id == owner_id).all()
+
+def create_menu_category(db: Session, restaurant_id: int, category_data: schemas.MenuCategoryCreate):
+    db_category = MenuCategory(
+        restaurant_id=restaurant_id,
+        name=category_data.name
+    )
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+    return db_category
+
+def create_menu_item(db: Session, category_id: int, item_data: schemas.MenuItemCreate, image_url: Optional[str] = None):
+    db_item = MenuItem(
+        category_id=category_id,
+        name=item_data.name,
+        price=item_data.price,
+        description=item_data.description,
+        is_available=item_data.is_available,
+        image_url=image_url
+    )
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+

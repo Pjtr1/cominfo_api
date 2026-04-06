@@ -28,16 +28,6 @@ class UserLogin(BaseModel):
 #=========================================================
 #restaurant table
 # ============================================
-# class RestaurantResponse(BaseModel):
-#     id: int
-#     name: str
-#     queue: int
-#     image_url: str | None
-#     canteen_id: int
-#
-#     model_config = {
-#         "from_attributes": True
-#     }
 
 class RestaurantResponse(BaseModel):
     id: int
@@ -51,12 +41,12 @@ class RestaurantResponse(BaseModel):
     longitude: float | None
 
     is_open: bool
-    utilization: int | None #nullable field must specify "None" or it will show error when fastapi recieve null
+    utilization: int | None #nullable field must specify "None" otherwise u get error when receive null
 
     payment_qr_url: str | None
 
     model_config = {
-        "from_attributes": True #SQLAlchemy object → Pydantic schema → JSON
+        "from_attributes": True #SQLAlchemy object > Pydantic schema > JSON
     }
 
 #============================================================
@@ -114,7 +104,7 @@ class OrderItemCreate(BaseModel):
     quantity: int
 
 class OrderCreate(BaseModel):
-    customer_id: int       # <-- added this
+    customer_id: int
     restaurant_id: int
     items: list[OrderItemCreate]
 class OrderItemResponse(BaseModel):
@@ -132,12 +122,13 @@ class OrderResponse(BaseModel):
     status: models.OrderStatus
     created_at: datetime
     order_items: list[OrderItemResponse]
+    payment_status: PaymentStatusEnum
 
     model_config = {"from_attributes": True}
 
 class CustomerOrderItemResponse(BaseModel):
     menu_item_id: int
-    name: str            # <-- include item name
+    name: str            # include item name
     quantity: int
     price: float
 
@@ -160,15 +151,30 @@ class OrderStatusEnum(str, Enum):
     completed = "completed"
     cancelled = "cancelled"
 
+
+class PaymentStatusEnum(str, Enum):
+    unpaid = "unpaid"
+    paid = "paid"
     # Schema for returning order status
 class OrderStatusResponse(BaseModel):
     order_id: int
     status: OrderStatusEnum
+    payment_status: PaymentStatusEnum
 
     model_config = {
         "from_attributes": True
     }
+class OrderUpdate(BaseModel):
+    status: Optional[OrderStatusEnum] = None
+    payment_status: Optional[PaymentStatusEnum] = None
 
+class OrderOut(BaseModel):
+    id: int
+    status: OrderStatusEnum
+    payment_status: PaymentStatusEnum
+
+class Config:
+        from_attributes = True  # if using SQLAlchemy
 
 #==========================================================
 #llm(planner) output
@@ -220,3 +226,21 @@ class RestaurantResponse(BaseModel):
     payment_qr_url: Optional[str]
 
     model_config = {"from_attributes": True}
+
+class MenuCategoryCreate(BaseModel):
+    name: str
+
+class MenuItemCreate(BaseModel):
+    name: str
+    price: float
+    description: Optional[str] = None
+    is_available: Optional[bool] = True
+
+
+class PromptPayQRRequest(BaseModel):
+    promptpay_id: str  = "0829092562"
+    amount: float
+
+
+class PromptPayQRResponse(BaseModel):
+    qr_url: str

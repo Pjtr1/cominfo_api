@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Enum, DateTime
 from sqlalchemy.sql import func
 import enum  # for UserRole
-#define all tables as class in python using sqlAlchemy, basically the core idea of ORM(object relational mapping)
+#define all tables as class in python using sqlAlchemy, doing ORM(object relational mapping)
 class UserRole(enum.Enum):
     customer = "customer"
     seller = "seller"
@@ -23,7 +23,7 @@ class User(Base):
     restaurants = relationship("Restaurant", back_populates="owner")
     orders = relationship("Order", back_populates="customer", cascade="all, delete")
 
-#"User" class will be primarily used in crud.py for db queries command
+
 
 #canteen tables
 class Canteen(Base):
@@ -111,6 +111,10 @@ class OrderStatus(enum.Enum):
     completed = "completed"
     cancelled = "cancelled"
 
+class PaymentStatus(enum.Enum):
+    unpaid = "unpaid"
+    paid = "paid"
+
 class Order(Base):
     __tablename__ = "orders"
 
@@ -120,6 +124,11 @@ class Order(Base):
     status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.pending)
     total_price = Column(DECIMAL(10,2), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    payment_status = Column(
+        Enum(PaymentStatus),
+        nullable=False,
+        default=PaymentStatus.unpaid
+    )
 
     # Relationships
     customer = relationship("User", back_populates="orders")
